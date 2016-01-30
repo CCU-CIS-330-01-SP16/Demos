@@ -12,25 +12,25 @@ namespace Lecture6Demos
         {
             Animal george = new Animal();
 
-            //george.BirthDate = new DateTime(2016, 1, 7, 11, 23, 00);
+            george.BirthDate = new DateTime(2016, 1, 7, 11, 23, 00);
             //george.BirthDate = null;
 
-            //Console.WriteLine("George was born on {0}.", george.BirthDate);
-            //TimeSpan? lifeSpan = george.LifeSpan();
-            //if (lifeSpan.HasValue)
-            //{
-            //    Console.WriteLine("George is now {0} days old.", Math.Round(george.LifeSpan().Value.TotalDays, 2));
-            //}
+            Console.WriteLine("George was born on {0}.", george.BirthDate);
+            TimeSpan? lifeSpan = george.LifeSpan();
+            if (lifeSpan.HasValue)
+            {
+                Console.WriteLine("George is now {0} days old.", Math.Round(george.LifeSpan().Value.TotalDays, 2));
+            }
 
-            //george.Running += A_Running;
-            //george.Running += A_Running;
+            george.Running += A_Running;
+            george.Running += A_Running;
             //george.Running -= A_Running;
             //george.Running += (s, e) => Console.WriteLine("Running");
 
             //george.Stopped += A_Stopped;
             //george.Stopped += A_Stopped;
             //george.Stopped -= A_Stopped;
-            //george.Stopped += (s, e) => Console.WriteLine("Stopped");
+            george.Stopped += (s, e) => Console.WriteLine("Stopped Event Happened");
 
             try
             {
@@ -76,18 +76,37 @@ namespace Lecture6Demos
             // RuntimeBinderException: Cannot implicitly convert type 'string' to 'int'
             //int myInt3 = myString2;
 
-//#if MATT
-//            Console.WriteLine("Matt mode");
-//#elif DEBUG
-//            Console.WriteLine("Debug mode");
-//#else
-//            Console.WriteLine("Release mode");
-//#endif
+#if MATT
+                        Console.WriteLine("Matt mode");
+#elif DEBUG
+            Console.WriteLine("Debug mode");
+#else
+                        Console.WriteLine("Release mode");
+#endif
+
+            DoAction(AcceptString);
         }
 
-        private static void DoAction<T>(T item, Action<T> action)
+        public delegate void TransferComplete(string result);
+
+        private static void AcceptString(string value)
         {
-            action(item);
+            Console.WriteLine(value);
+        }
+
+        private static void DoAction(TransferComplete action)
+        {
+           // action("all looks good");
+        }
+
+        private static void DoSomething<T>(T item)
+        {
+            Something(item);
+        }
+
+        private static void Something<T>(T item)
+        {
+            Console.WriteLine(item);
         }
 
         private static void A_Stopped(object sender, EventArgs e)
@@ -97,7 +116,7 @@ namespace Lecture6Demos
 
         private static void A_Running(object sender, EventArgs e)
         {
-            Console.WriteLine("Running");
+            Console.WriteLine("Running Event Occurred");
         }
     }
 }

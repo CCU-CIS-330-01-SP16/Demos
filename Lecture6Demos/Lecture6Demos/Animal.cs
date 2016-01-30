@@ -14,7 +14,7 @@ namespace Lecture6Demos
 
         public Status Status { get; set; }
 
-        public Nullable<DateTime> BirthDate { get; set; }
+        public DateTime? BirthDate { get; set; }
 
         public void Run()
         {
