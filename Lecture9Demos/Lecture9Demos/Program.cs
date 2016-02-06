@@ -13,6 +13,8 @@ namespace Lecture9Demos
         {
             Console.WriteLine("Hello World!");
 
+            //Console.WriteLine(Resources.HelloWorld);
+
             //Assembly currentAssembly = Assembly.GetExecutingAssembly();
             //Console.WriteLine("FullName: {0}", currentAssembly.FullName);
             //Console.WriteLine("Location: {0}", currentAssembly.Location);
