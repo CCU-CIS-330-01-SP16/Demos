@@ -31,22 +31,27 @@ namespace Lecture10Demos
                 // Display the memory used after forcing garbage collection.
                 Console.WriteLine("Memory Used: {0:n0} bytes", GC.GetTotalMemory(true));
 
-                Console.Write("Process more clients? [y|n] (y): ");
-                keyInfo = Console.ReadKey();
-                Console.WriteLine();
+                //Console.Write("Process more clients? [y|n] (y): ");
+                //keyInfo = Console.ReadKey();
+                //Console.WriteLine();
+
+                //GC.Collect();
             }
-            while (keyInfo.HasValue && keyInfo.Value.Key == ConsoleKey.Y || keyInfo.Value.Key == ConsoleKey.Enter);
+            while (true); //keyInfo.HasValue && keyInfo.Value.Key == ConsoleKey.Y || keyInfo.Value.Key == ConsoleKey.Enter);
         }
 
         private static void ManageContacts(ContactRepository repository)
         {
             // Create a new contact manager.
-            ContactManager manager = new ContactManager(repository);
-
-            // Add some new contacts to the repository.
-            for (int i = 0; i < MaxContactsToAdd; i++)
+            using (ContactManager manager = new ContactManager(repository))
             {
-                manager.Add(new Contact { Name = "Contact " + i });
+                // Add some new contacts to the repository.
+                for (int i = 0; i < MaxContactsToAdd; i++)
+                {
+                    manager.Add(new Contact { Name = "Contact " + i });
+                }
+
+                //manager = null;
             }
         }
     }

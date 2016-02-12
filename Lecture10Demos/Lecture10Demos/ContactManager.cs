@@ -7,7 +7,7 @@ using System.Threading.Tasks;
 
 namespace Lecture10Demos
 {
-    class ContactManager
+    class ContactManager : IDisposable
     {
         private int contactsAdded;
         private ContactRepository _repository;
@@ -23,9 +23,14 @@ namespace Lecture10Demos
             _repository.Add(contact);
         }
 
+        public void Dispose()
+        {
+            _repository.ContactAdded -= HandleContactAdded;
+        }
+
         private void HandleContactAdded(object sender, ContactEventArgs e)
         {
-            Interlocked.Increment(ref contactsAdded);
+            //Interlocked.Increment(ref contactsAdded);
         }
     }
 }
