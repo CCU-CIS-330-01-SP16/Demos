@@ -2,6 +2,7 @@
 using System.Collections.Generic;
 using System.Diagnostics;
 using System.Linq;
+using System.Net.Http;
 using System.Text;
 using System.Threading;
 using System.Threading.Tasks;
@@ -33,6 +34,8 @@ namespace Lecture11Demos
             ConcurrentWrite();
 
             //ConcurrentThreadCount(100);
+
+            //Console.WriteLine("Web page size: {0:n0}.", AccessTheWebAsync().Result);
 
             //FamilyDataPlan();
         }
@@ -214,24 +217,32 @@ namespace Lecture11Demos
             return downloadSize;
         }
 
-        static async Task<double> DownloadAsync(string deviceName, double maxDownloadSize)
+        static async Task<int> AccessTheWebAsync()
         {
-            return await Task.Run(() => {
-                Stopwatch sw = new Stopwatch();
+            // You need to add a reference to System.Net.Http to declare client.
+            HttpClient client = new HttpClient();
 
-                double downloadSize = RandomNumberGenerator.NextDouble() * maxDownloadSize;
+            Console.WriteLine("Starting web page download...");
 
-                sw.Start();
-                Task.Delay((int)(downloadSize / BytesPerMB));
-                sw.Stop();
+            // GetStringAsync returns a Task<string>. That means that when you await the
+            // task you'll get a string (urlContents).
+            Task<string> getStringTask = client.GetStringAsync("http://msdn.microsoft.com");
 
-                Console.WriteLine("DEBUG: {0} downloaded {1:n2} MB in {2:n0}ms -- {3:n2} MB/ms!!", deviceName,
-                    downloadSize / BytesPerMB,
-                    sw.ElapsedMilliseconds,
-                    (downloadSize / BytesPerMB) / sw.ElapsedMilliseconds);
+            // You can do work here that doesn't rely on the string from GetStringAsync.
+            Console.WriteLine("Doing some other work here...");
 
-                return downloadSize;
-            });
+            // The await operator suspends AccessTheWebAsync.
+            //  - AccessTheWebAsync can't continue until getStringTask is complete.
+            //  - Meanwhile, control returns to the caller of AccessTheWebAsync.
+            //  - Control resumes here when getStringTask is complete. 
+            //  - The await operator then retrieves the string result from getStringTask.
+            string urlContents = await getStringTask;
+
+            Console.WriteLine("Download complete...");
+
+            // The return statement specifies an integer result.
+            // Any methods that are awaiting AccessTheWebAsync retrieve the length value.
+            return urlContents.Length;
         }
     }
 }
