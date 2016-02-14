@@ -1,5 +1,6 @@
 ﻿using System;
 using System.Collections.Generic;
+using System.Diagnostics;
 using System.Linq;
 using System.Text;
 using System.Threading;
@@ -38,26 +39,63 @@ namespace Lecture11Demos
 
         static void ConcurrentWrite()
         {
+            Stopwatch sw = new Stopwatch();
+
             Console.WriteLine();
 
+            sw.Start();
             WriteValue("0");
             WriteValue("1");
+            WriteValue("2");
+            WriteValue("3");
+            sw.Stop();
 
-            //Thread tx = new Thread(() => WriteValue("0")); // { IsBackground = true };
-            //Thread ty = new Thread(() => WriteValue("1")); // { IsBackground = true };
-            //tx.Start();
-            //ty.Start();
-            //tx.Join();
-            //ty.Join();
+            //sw.Start();
+            //Thread t0 = new Thread(() => WriteValue("0")); // { IsBackground = true };
+            //Thread t1 = new Thread(() => WriteValue("1")); // { IsBackground = true };
+            //Thread t2 = new Thread(() => WriteValue("2")); // { IsBackground = true };
+            //Thread t3 = new Thread(() => WriteValue("3")); // { IsBackground = true };
+            //t0.Start();
+            //t1.Start();
+            //t2.Start();
+            //t3.Start();
+            //t0.Join();
+            //t1.Join();
+            //t2.Join();
+            //t3.Join();
+            //sw.Stop();
 
-            Console.WriteLine();
+            //sw.Start();
+            //CountdownEvent countdown = new CountdownEvent(4);
+            //ThreadPool.QueueUserWorkItem(s => { WriteValue("0"); countdown.Signal(); });
+            //ThreadPool.QueueUserWorkItem(s => { WriteValue("1"); countdown.Signal(); });
+            //ThreadPool.QueueUserWorkItem(s => { WriteValue("2"); countdown.Signal(); });
+            //ThreadPool.QueueUserWorkItem(s => { WriteValue("3"); countdown.Signal(); });
+            //countdown.Wait();
+            //sw.Stop();
+
+            //sw.Start();
+            //Task.WaitAll(
+            //    Task.Run(() => WriteValue("0")),
+            //    Task.Run(() => WriteValue("1")),
+            //    Task.Run(() => WriteValue("2")),
+            //    Task.Run(() => WriteValue("3"))
+            //    );
+            //sw.Stop();
+
+            //var task = Task.Run(() => 5 + 6);
+            //Console.WriteLine(task.Result);
+
+            Console.WriteLine("Elapsed Time: {0:n0}ms", sw.ElapsedMilliseconds);
         }
 
         static void WriteValue(string value, int iterations = 100)
         {
             for(int i = 0; i < iterations; i++)
             {
+                // Simulate some work.
                 Thread.Sleep(10);
+
                 Console.WriteLine(value);
             }
         }
@@ -117,6 +155,7 @@ namespace Lecture11Demos
             Console.WriteLine("Family Data Plan: {0:n0}GB", DataBalance / BytesPerGB);
             Console.WriteLine("******************************");
 
+            // Simulate some downloads by each device in the family.
             while (DataBalance > 0)
             {
                 foreach (string device in devices)
@@ -128,7 +167,8 @@ namespace Lecture11Demos
                         DataBalance -= downloadSize;
                         TotalDownloaded += downloadSize;
 
-                        //Console.WriteLine("DEBUG: Current Data Balance: {0:n2}MB", DataBalance / BytesPerMB);
+                        //Console.WriteLine("DEBUG: Data Balance: {0:n2} MB", DataBalance / BytesPerMB);
+                        //Console.WriteLine("DEBUG: Total Downloaded: {0:n2} MB", TotalDownloaded / BytesPerMB);
                     }
                     else
                     {
@@ -158,13 +198,40 @@ namespace Lecture11Demos
 
         static double Download(string deviceName, double maxDownloadSize)
         {
+            Stopwatch sw = new Stopwatch();
+
             double downloadSize = RandomNumberGenerator.NextDouble() * maxDownloadSize;
 
+            sw.Start();
             Thread.Sleep((int)(downloadSize / BytesPerMB));
+            sw.Stop();
 
-            Console.WriteLine("DEBUG: {0} downloaded {1:n2} MB", deviceName, downloadSize / BytesPerMB);
+            Console.WriteLine("DEBUG: {0} downloaded {1:n2} MB in {2:n0}ms -- {3:n2} MB/ms!!", deviceName,
+                downloadSize / BytesPerMB,
+                sw.ElapsedMilliseconds,
+                (downloadSize / BytesPerMB) / sw.ElapsedMilliseconds);
 
             return downloadSize;
+        }
+
+        static async Task<double> DownloadAsync(string deviceName, double maxDownloadSize)
+        {
+            return await Task.Run(() => {
+                Stopwatch sw = new Stopwatch();
+
+                double downloadSize = RandomNumberGenerator.NextDouble() * maxDownloadSize;
+
+                sw.Start();
+                Task.Delay((int)(downloadSize / BytesPerMB));
+                sw.Stop();
+
+                Console.WriteLine("DEBUG: {0} downloaded {1:n2} MB in {2:n0}ms -- {3:n2} MB/ms!!", deviceName,
+                    downloadSize / BytesPerMB,
+                    sw.ElapsedMilliseconds,
+                    (downloadSize / BytesPerMB) / sw.ElapsedMilliseconds);
+
+                return downloadSize;
+            });
         }
     }
 }
