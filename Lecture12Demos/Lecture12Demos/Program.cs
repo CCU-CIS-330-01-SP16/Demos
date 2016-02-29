@@ -14,7 +14,7 @@ namespace Lecture12Demos
     {
         static void Main(string[] args)
         {
-            //RaceCondition();
+            RaceCondition();
 
             //Deadlock();
 
@@ -24,7 +24,7 @@ namespace Lecture12Demos
 
             //PLinqDemo();
 
-            ParallelDemo();
+            //ParallelDemo();
         }
 
         static void RaceCondition(long count = 100)
