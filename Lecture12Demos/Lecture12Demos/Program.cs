@@ -12,6 +12,8 @@ namespace Lecture12Demos
 {
     class Program
     {
+        static object countLock = new object();
+
         static void Main(string[] args)
         {
             RaceCondition();
@@ -31,35 +33,35 @@ namespace Lecture12Demos
         {
             long actualCount = 0;
 
-            for (long i = 0; i < count; i++)
-            {
-                // Simulate some work before incrementing the count.
-                Thread.Sleep(1);
-
-                actualCount++;
-            }
-
-            //List<Thread> threads = new List<Thread>();
-
             //for (long i = 0; i < count; i++)
             //{
-            //    Thread thread = new Thread(() =>
-            //    {
-            //        // Simulate some work before incrementing the count.
-            //        Thread.Sleep(1);
+            //    // Simulate some work before incrementing the count.
+            //    Thread.Sleep(1);
 
-            //        actualCount++;
-            //    });
-
-            //    thread.Start();
-
-            //    threads.Add(thread);
+            //    actualCount++;
             //}
 
-            //foreach (var thread in threads)
-            //{
-            //    thread.Join();
-            //}
+            List<Thread> threads = new List<Thread>();
+
+            for (long i = 0; i < count; i++)
+            {
+                Thread thread = new Thread(() =>
+                {
+                    // Simulate some work before incrementing the count.
+                    Thread.Sleep(1);
+
+                    Interlocked.Increment(ref actualCount);
+                });
+
+                thread.Start();
+
+                threads.Add(thread);
+            }
+
+            foreach (var thread in threads)
+            {
+                thread.Join();
+            }
 
             Console.WriteLine("Expected Count: {0:n0}", count);
             Console.WriteLine("Actual Count: {0:n0}", actualCount);
