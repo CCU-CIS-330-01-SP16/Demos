@@ -17,6 +17,15 @@ namespace Lecture16Demos
             Console.WriteLine("Ruff! Ruff!");
         }
 
+        private void Bark(int times, string barkSound)
+        {
+            for(int i = 0; i < times; i++)
+            {
+                Console.Write(barkSound);
+            }
+            Console.WriteLine();
+        }
+
         private void Breathe()
         {
             Console.WriteLine("Inhale...Exhale");

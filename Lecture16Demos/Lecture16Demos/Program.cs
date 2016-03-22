@@ -16,7 +16,10 @@ namespace Lecture16Demos
     {
         static void Main(string[] args)
         {
-            TypeInformationDemo();
+            //UriBuilder builder = new UriBuilder("http", "localhost", 4321);
+            //Console.WriteLine(builder.ToString());
+
+            //TypeInformationDemo();
 
             //TypeInstantiationDemo();
 
@@ -77,8 +80,13 @@ namespace Lecture16Demos
         {
             Dog d = new Dog();
 
-            MethodInfo barkMethod = d.GetType().GetMethod("Bark", BindingFlags.Public | BindingFlags.Instance);
-            barkMethod.Invoke(d, null);
+            foreach(var method in d.GetType().GetMethods())
+                Console.WriteLine(method.Name);
+
+            MethodInfo barkMethod = d.GetType().GetMethod("Bark", BindingFlags.NonPublic | BindingFlags.Instance, null, new Type[] { typeof(int), typeof(string) }, null);
+            barkMethod.Invoke(d, new object[] { 942, "Yip!" });
+
+            //d.Bark(23);
 
             // Won't compile: d.Breathe();
             MethodInfo breatheMethod = d.GetType().GetMethod("Breathe", BindingFlags.NonPublic | BindingFlags.Instance);
