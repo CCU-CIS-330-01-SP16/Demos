@@ -29,6 +29,8 @@ namespace Lecture17Demos
             //ProtectedMemoryDemo();
 
             //ProtectedDataDemo();
+
+            //ExamPrep();
         }
 
         [PrincipalPermission(SecurityAction.Demand, Authenticated = true, Name = @"matts1\matt", Role = "Administrators")]
@@ -138,6 +140,36 @@ namespace Lecture17Demos
 
             // Return the array.
             return entropy;
+        }
+
+        interface IFile
+        {
+            void Open();
+        }
+
+        interface IDatabase
+        {
+            void Open();
+        }
+
+        private class UseResources : IFile, IDatabase
+        {
+            void IDatabase.Open()
+            {
+                Console.WriteLine("Database opened.");
+            }
+
+            void IFile.Open()
+            {
+                Console.WriteLine("File opened.");
+            }
+        }
+
+        public static void ExamPrep()
+        {
+            var manager = new UseResources();
+            ((IFile)manager).Open();
+            ((IDatabase)manager).Open();
         }
     }
 }
