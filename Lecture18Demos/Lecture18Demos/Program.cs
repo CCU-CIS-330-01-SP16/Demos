@@ -17,6 +17,8 @@ namespace Lecture18Demos
             //AsymmetricEncryptionDemo();
 
             //DigitalSigningDemo();
+
+            //ExamDemo();
         }
 
         private static void SymmetricEncryptionDemo()
@@ -111,6 +113,14 @@ namespace Lecture18Demos
             Console.WriteLine("Plain text: {0}", plainText);
             Console.WriteLine("Signature: {0}", Encoding.UTF8.GetString(signature));
             Console.WriteLine("IsValid? {0}", isValid);
+        }
+
+        private static void ExamDemo()
+        {
+            BaseLogger logger = new Logger();
+            logger.Log("Log started");
+            logger.Log("Base: Log continuing");
+            ((Logger)logger).LogCompleted();
         }
     }
 }
