@@ -5,8 +5,11 @@ using System.Diagnostics;
 using System.IO;
 using System.Linq;
 using System.Reflection;
+using System.Runtime.Serialization;
+using System.Runtime.Serialization.Json;
 using System.Text;
 using System.Threading.Tasks;
+using System.Xml;
 
 namespace Week15ExamPrep
 {
@@ -14,14 +17,64 @@ namespace Week15ExamPrep
     {
         static void Main(string[] args)
         {
-            Question1();
+            //DataContractSerializationDemo();
+
+            //Question1();
             // Question2(-23);
             // Question3();
             // Question4();
-            // Question5();
+             Question5();
             // Question6();
             // Question7();
             // Question8();
+        }
+
+        private static void DataContractSerializationDemo()
+        {
+            List<Human> humans = new List<Human>();
+
+            var Brian = new Human
+            {
+                Name = "Brian Bell",
+                HairColor = "Mahogany",
+                Occupation = "Chick-fil-a Certified Trainer",
+                MaritalStatus = MaritalStatus.ItsComplicated,
+                Weight = 453
+            };
+
+            var Hannah = new Human
+            {
+                Name = "Hannah Bell",
+                HairColor = "Dirty Dishwasher Blonde - All Natural",
+                Occupation = "Student",
+                MaritalStatus = MaritalStatus.Single,
+                Weight = 237,
+                Sibling = Brian
+            };
+
+            Brian.Sibling = Hannah;
+
+            humans.Add(Brian);
+            humans.Add(Hannah);
+
+            try
+            {
+                DataContractSerializer serializer = new DataContractSerializer(typeof(List<Human>));
+                using (XmlWriter writer = XmlWriter.Create("humans.txt"))
+                {
+                    serializer.WriteObject(writer, humans);
+                }
+            }
+            catch(Exception ex)
+            {
+                Console.WriteLine(ex.Message);
+            }
+
+            //DataContractJsonSerializer serializer = new DataContractJsonSerializer(typeof(Human));
+            //using (FileStream stream = File.Create("human.txt"))
+            //{
+            //    serializer.WriteObject(stream, Brian);
+            //}
         }
 
         private static void Question1()
@@ -33,13 +86,13 @@ namespace Week15ExamPrep
             list.Add(item1);
 
             // Compile time error:
-            // item2 = list[0];
+            //item2 = list[0];
 
             // What is the right way to assign the first item in the list to item2?
 
             // item2 = ((List<int>)list)[0];
             // item2 = list[0].Equals(typeof(int));
-            // item2 = Convert.ToInt32(list[0]);
+            item2 = Convert.ToInt32(list[0]);
             // item2 = ((int[])list)[0];
 
             Console.WriteLine(item2);
@@ -49,7 +102,7 @@ namespace Week15ExamPrep
         {
             // Ensure debugger breaks in all builds if amount <= 0.
 
-            // Trace.Assert(amount > 0, "Amount should be greater than zero");
+            Trace.Assert(amount > 0, "Amount should be greater than zero");
             // Debug.Assert(amount > 0, "Amount should be greater than zero");
             // Debug.Write(amount > 0);
             // Trace.Write(amount > 0);
@@ -70,7 +123,7 @@ namespace Week15ExamPrep
             // How do I sort by Gender then by TotalPurchases from hightest to lowest?
             // This is an example of delegate usage.
 
-            // sortedCustomers = customers.OrderBy(c => c.Gender).ThenByDescending(c => c.TotalPurchases);
+            sortedCustomers = customers.OrderBy(c => c.Gender).ThenByDescending(c => c.TotalPurchases);
             // sortedCustomers = customers.OrderByDescending(c => c.TotalPurchases).ThenBy(c => c.Gender);
             // sortedCustomers = customers.SortBy(c => c.Gender).ThenByDescending(c => c.TotalPurchases);
             // sortedCustomers = customers.SortByDescending(c => c.TotalPurchases).ThenBy(c => c.Gender);
@@ -91,7 +144,7 @@ namespace Week15ExamPrep
             // currentAssembly = Assembly.GetAssembly();
             // currentAssembly = Assembly.Current.GetType();
             // currentAssembly = Assembly.Load();
-            // currentAssembly = Assembly.GetExecutingAssembly();
+            //currentAssembly = Assembly.GetExecutingAssembly();
 
             Console.WriteLine(currentAssembly?.FullName);
         }

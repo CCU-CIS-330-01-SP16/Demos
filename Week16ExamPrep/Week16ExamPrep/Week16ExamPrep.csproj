@@ -4,11 +4,11 @@
   <PropertyGroup>
     <Configuration Condition=" '$(Configuration)' == '' ">Debug</Configuration>
     <Platform Condition=" '$(Platform)' == '' ">AnyCPU</Platform>
-    <ProjectGuid>{BDE157D2-CA18-4FFE-9332-31EBD9F2398F}</ProjectGuid>
+    <ProjectGuid>{AF1098F6-9888-46CF-A49A-6E61561E843E}</ProjectGuid>
     <OutputType>Exe</OutputType>
     <AppDesignerFolder>Properties</AppDesignerFolder>
-    <RootNamespace>Week15ExamPrep</RootNamespace>
-    <AssemblyName>Week15ExamPrep</AssemblyName>
+    <RootNamespace>Week16ExamPrep</RootNamespace>
+    <AssemblyName>Week16ExamPrep</AssemblyName>
     <TargetFrameworkVersion>v4.6</TargetFrameworkVersion>
     <FileAlignment>512</FileAlignment>
     <AutoGenerateBindingRedirects>true</AutoGenerateBindingRedirects>
@@ -35,7 +35,6 @@
   <ItemGroup>
     <Reference Include="System" />
     <Reference Include="System.Core" />
-    <Reference Include="System.Runtime.Serialization" />
     <Reference Include="System.Xml.Linq" />
     <Reference Include="System.Data.DataSetExtensions" />
     <Reference Include="Microsoft.CSharp" />
@@ -44,9 +43,9 @@
     <Reference Include="System.Xml" />
   </ItemGroup>
   <ItemGroup>
-    <Compile Include="Customer.cs" />
-    <Compile Include="Human.cs" />
-    <Compile Include="MaritalStatus.cs" />
+    <Compile Include="AddAnimalCallback.cs" />
+    <Compile Include="Animal.cs" />
+    <Compile Include="AnimalTracker.cs" />
     <Compile Include="Program.cs" />
     <Compile Include="Properties\AssemblyInfo.cs" />
   </ItemGroup>
